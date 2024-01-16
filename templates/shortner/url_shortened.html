@@ -1,0 +1,8 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+  <h2>URL Shortened</h2>
+  <p>Original URL: {{ short_url.original_url }}</p>
+  <p>Short URL: <a href="{{ short_url.short_url }}">{{ short_url.short_url }}</a></p>
+  <img src="{{short_url.qr.url}}" alt="QR Code">
+{% endblock %}

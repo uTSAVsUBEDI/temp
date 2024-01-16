@@ -1,0 +1,43 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+  <h2>Short URLs List</h2>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Original URL</th>
+        <th scope="col">Expiration Date</th>
+        <th scope="col">Short URL</th>
+        <th scope="col">QR Code</th>
+        <th scope="col">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for short_url in object_list %}
+        <tr>
+          <td>
+            <a href="{{ short_url.original_url }}">
+            {{ short_url.original_url }}
+        </a>
+        </td>
+          <td>{{ short_url.expiration_date|default:"N/A" }}</td>
+          <td>
+            <a href="{{short_url.short_url}}">{{ short_url.short_url|default:"N/A" }}</a>
+            
+        </td>
+          <td>
+            {% if short_url.qr %}
+              <img src="{{ short_url.qr.url }}" alt="QR Code" height="50">
+            {% else %}
+              N/A
+            {% endif %}
+          </td>
+          <td>
+            <a href="{% url 'shortner:url_edit' pk=short_url.pk %}" class="btn btn-primary btn-sm">Edit</a>
+            <a href="{% url 'shortner:url_delete' pk=short_url.pk %}" class="btn btn-danger btn-sm">Delete</a>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

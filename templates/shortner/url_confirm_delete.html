@@ -1,0 +1,32 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+  <div class="container mt-5">
+    <h2>Delete Short URL</h2>
+    <p>Are you sure you want to delete the following short URL?</p>
+    <dl class="row">
+      <dt class="col-sm-3">Original URL:</dt>
+      <dd class="col-sm-9">{{ object.original_url }}</dd>
+
+      <dt class="col-sm-3">Short URL:</dt>
+      <dd class="col-sm-9">{{ object.short_url|default:"N/A" }}</dd>
+
+      <dt class="col-sm-3">Expiration Date:</dt>
+      <dd class="col-sm-9">{{ object.expiration_date|default:"N/A" }}</dd>
+
+      <dt class="col-sm-3">QR Code:</dt>
+      <dd class="col-sm-9">
+        {% if object.qr %}
+          <img src="{{ object.qr.url }}" alt="QR Code" height="50">
+        {% else %}
+          N/A
+        {% endif %}
+      </dd>
+    </dl>
+    <form method="post" action="{% url 'shortner:url_delete' pk=object.pk %}">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-danger">Delete</button>
+      <a href="{% url 'shortner:url_list' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+  </div>
+{% endblock %}

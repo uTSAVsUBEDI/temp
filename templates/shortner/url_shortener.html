@@ -1,0 +1,14 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+
+  <h2>URL Shortener</h2>
+
+
+  <a href="{% url 'shortner:url_list' %}">View My URLs</a>
+  <form method="post" action="{% url 'shortner:home' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Shorten URL</button>
+  </form>
+{% endblock %}
