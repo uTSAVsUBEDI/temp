@@ -49,12 +49,11 @@ class URLShortenerView(View):
             img.save(buffer, format="PNG")
             qr_image_bytes = buffer.getvalue()
 
-            # Convert the bytes to a base64-encoded string
             qr_image_base64 = base64.b64encode(qr_image_bytes).decode('utf-8')
-            short_url.qr = qr_image_base64
+
+            short_url.qr = 'data:image/png;base64,' + qr_image_base64
             short_url.save()
 
-            # short_url.qr.save(short_url.short_part+'.png', img, save=True)
 
             return render(request, 'shortner/url_shortened.html', {'short_url': short_url})
         return render(request, self.template_name, {'form': form})

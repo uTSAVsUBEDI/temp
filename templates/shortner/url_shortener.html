@@ -1,14 +1,32 @@
 {% extends 'layouts/base.html' %}
 
+{% block title %}Add URL{% endblock %}
+
 {% block content %}
 
-  <h2>URL Shortener</h2>
+  <section class="section-content padding-y mt-5" style="min-height:84vh">
+    <div class="card mx-auto" style="max-width: 580px; ">
+                
+        <div class="card-body">
+        <h4 class="card-title mb-4">URL Shortener</h4>
 
-
-  <a href="{% url 'shortner:url_list' %}">View My URLs</a>
-  <form method="post" action="{% url 'shortner:home' %}">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Shorten URL</button>
-  </form>
+        <form method="post" action="{% url 'shortner:home' %}">
+          {% csrf_token %}
+          {% for field in form %}
+            <div class="form-group">
+              {{ field.label_tag }}
+              {{ field }}
+              {% if field.errors %}
+                <small class="text-danger">{{ field.errors.0 }}</small>
+              {% endif %}
+            </div>
+          {% endfor %}
+          <button type="submit" class="btn btn-primary">Shorten URL</button>
+        </form>
+        </div>
+      </div> 
+    
+      <br><br>
+    
+    </section>
 {% endblock %}

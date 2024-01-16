@@ -47,7 +47,7 @@ class DateTimeModel(models.Model):
 class ExpirationManager(models.Manager):
 
     def get_queryset(self) -> QuerySet:
-        return super().get_queryset().filter(expiration_date__lte=timezone.now())
+        return super().get_queryset().filter(expiration_date__gt=timezone.now())
 
 
 class ShortURL(DateTimeModel):
@@ -57,6 +57,8 @@ class ShortURL(DateTimeModel):
     expiration_date = models.DateTimeField(null=True, blank=True)
     qr = models.ImageField(blank=True, null=True, upload_to='qr/')
     short_url = models.CharField(blank=True, null=True, max_length=400)
+
+    objects = ExpirationManager()
     
 
     def is_expired(self):
@@ -69,8 +71,13 @@ class ShortURL(DateTimeModel):
             while ShortURL.objects.filter(short_part=self.short_part).exists():
                 unique_id = uuid.uuid4().int
                 self.short_part = encode_base62(unique_id)
-            current_site = Site.objects.get_current()
-            self.short_url = f"http://{current_site.domain}/{self.short_part}/"
+
+        current_site = Site.objects.get_current()
+        self.short_url = f"http://{current_site.domain}/{self.short_part}/"
+
+        if not self.expiration_date:
+            self.expiration_date = timezone.now().date() + timezone.timedelta(days=3)
+
         super().save(*args, **kwargs)
 
 

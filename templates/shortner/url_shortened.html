@@ -1,8 +1,24 @@
 {% extends 'layouts/base.html' %}
 
+{% block title %}URL Detail{% endblock %}
+
 {% block content %}
-  <h2>URL Shortened</h2>
-  <p>Original URL: {{ short_url.original_url }}</p>
-  <p>Short URL: <a href="{{ short_url.short_url }}">{{ short_url.short_url }}</a></p>
-  <img src="{{short_url.qr.url}}" alt="QR Code">
+  <section class="section-content padding-y mt-5" style="min-height:84vh">
+    <div class="card mx-auto" style="max-width: 580px;">
+      <div class="card-body">
+        <h4 class="card-title mb-4">URL Details</h4>
+
+        <p><strong>Original URL:</strong> {{ short_url.original_url }}</p>
+        <p><strong>Short URL:</strong> <a href="{{ short_url.short_url }}" target="_blank">{{ short_url.short_url }}</a></p>
+        
+        <div class="mb-4">
+          <strong>QR Code:</strong>
+          <img src="{{ short_url.qr | safe }}" alt="QR Code" class="img-fluid">
+        </div>
+
+
+        <a href="{% url 'shortner:home' %}" class="btn btn-secondary">Back to Home</a>
+      </div>
+    </div>
+  </section>
 {% endblock %}
